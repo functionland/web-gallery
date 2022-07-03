@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className="app">
-      <Router>
+      <Router basename='/web-gallery'>
         <div className='app-container'>
           <Routes>
             <Route path="/" element={<Gallery fulaClient={fulaClient} DID={DID} />} />
