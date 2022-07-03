@@ -68,10 +68,10 @@ const Gallery = ({ fulaClient, DID }) => {
       <h1>Gallery</h1>
       <div className='m-20'>
         {fulaClient === null ? <div>No Box Connected!</div> : null}
-        {DID === undefined ? <div>Warning: No Wallet Connected. You may only view unencrypted photos. Your photos are uploaded unencrypted</div> : null}
+        {DID === undefined ? <div>No Wallet Connected!</div> : null}
       </div>
       {fulaClient !== null ? <div>
-        <Uploader onUpload={onUpload} />
+        {/* <Uploader onUpload={onUpload} /> */}
         {
           photos.length > 0 && photos.map((photo, index) => (
             <div key={index} >
