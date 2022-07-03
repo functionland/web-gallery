@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from "@chakra-ui/react";
 import { Web3ReactProvider } from "@web3-react/core";
 import { ethers } from "ethers";
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const getLibrary = (provider) => {
   const library = new ethers.providers.Web3Provider(provider);
@@ -17,7 +18,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
       <Web3ReactProvider getLibrary={getLibrary}>
+        <Router basename="/web-gallery">
         <App />
+        </Router>
       </Web3ReactProvider>
   </React.StrictMode>
 );

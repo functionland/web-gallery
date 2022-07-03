@@ -14,9 +14,6 @@ body {
   )!important;
   color: white;
 }
-.app-header{
-  height: 100px;
-}
 .conn-info{
   /*display: flex;*/
   color: white;
@@ -271,11 +268,15 @@ button.single{
   border-radius: 5px;
 }
 
-.app-footer{
+.app-header{
+  width: 90%;
   display: flex;
   flex-direction: row;
-  justify-self: flex-end;
-  /* justify-content: space-evenly; */
+  /* justify-self: flex-end; */
+  justify-content: space-evenly;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #5d0cff;
+  margin: 30px;
 }
 
 .mtop-100{

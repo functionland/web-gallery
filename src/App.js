@@ -21,8 +21,12 @@ function App() {
 
   return (
     <div className="app">
-      <Router basename='/web-gallery'>
         <div className='app-container'>
+        <div className='app-header'>
+            <NavLink to='/' className='link' style={hideIfActive}>Gallery</NavLink>
+            <NavLink to='/boxes' className='link' style={hideIfActive}>Connect to Box</NavLink>
+            <NavLink to='/identity' className='link' style={hideIfActive}>Connect to Wallet</NavLink>
+          </div>
           <Routes>
             <Route path="/" element={<Gallery fulaClient={fulaClient} DID={DID} />} />
             <Route path="/boxes" element={
@@ -35,13 +39,7 @@ function App() {
             } />
             <Route path="/identity" element={<Identity setDID={setDID} DID={DID} />} />
           </Routes>
-          <div className='app-footer'>
-            <NavLink to='/' className='link' style={hideIfActive}>Gallery</NavLink>
-            <NavLink to='/boxes' className='link' style={hideIfActive}>Connect to Box</NavLink>
-            <NavLink to='/identity' className='link' style={hideIfActive}>Connect to Wallet</NavLink>
-          </div>
         </div>
-      </Router>
 
     </div>
   );
