@@ -6,6 +6,7 @@ import Gallery from './pages/Gallery';
 import Identity from './pages/Identity';
 import { useState } from 'react';
 import { Status } from '@functionland/fula';
+import SharedPhotos from './pages/SharedPhotos';
 
 const hideIfActive = ({ isActive }) => { return isActive ? { display: 'none' } : {} }
 
@@ -18,28 +19,30 @@ function App() {
 
   // DID
   const [DID, setDID] = useState(undefined)
-
+  
   return (
     <div className="app">
-        <div className='app-container'>
+      <div className='app-container'>
         <div className='app-header'>
-            <NavLink to='/' className='link' style={hideIfActive}>Gallery</NavLink>
-            <NavLink to='/boxes' className='link' style={hideIfActive}>Connect to Box</NavLink>
-            <NavLink to='/identity' className='link' style={hideIfActive}>Connect to Wallet</NavLink>
-          </div>
-          <Routes>
-            <Route path="/" element={<Gallery fulaClient={fulaClient} DID={DID} />} />
-            <Route path="/boxes" element={
-              <Boxes fulaClient={fulaClient}
-                setFulaClient={setFulaClient}
-                connectionStatus={connectionStatus}
-                setConnectionStatus={setConnectionStatus}
-                boxAddress={boxAddress}
-                setBoxAddress={setBoxAddress} />
-            } />
-            <Route path="/identity" element={<Identity setDID={setDID} DID={DID} />} />
-          </Routes>
+          <NavLink to='/' className='link' style={hideIfActive}>Gallery</NavLink>
+          <NavLink to='/boxes' className='link' style={hideIfActive}>Connect to Box</NavLink>
+          <NavLink to='/identity' className='link' style={hideIfActive}>Connect to Wallet</NavLink>
+          <NavLink to='/shared' className='link' style={hideIfActive}>Shared</NavLink>
         </div>
+        <Routes>
+          <Route path="/" element={<Gallery fulaClient={fulaClient} DID={DID} />} />
+          <Route path="/boxes" element={
+            <Boxes fulaClient={fulaClient}
+              setFulaClient={setFulaClient}
+              connectionStatus={connectionStatus}
+              setConnectionStatus={setConnectionStatus}
+              boxAddress={boxAddress}
+              setBoxAddress={setBoxAddress} />
+          } />
+          <Route path="/identity" element={<Identity setDID={setDID} DID={DID} />} />
+          <Route path="/shared" element={<SharedPhotos fulaClient={fulaClient} DID={DID} />} />
+        </Routes>
+      </div>
 
     </div>
   );
