@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Web3ReactProvider } from "@web3-react/core";
 import { ethers } from "ethers";
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 
 const getLibrary = (provider) => {
   const library = new ethers.providers.Web3Provider(provider);
@@ -14,15 +14,13 @@ const getLibrary = (provider) => {
   return library;
 };
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <Router basename="/web-gallery">
-        <App />
-        </Router>
-      </Web3ReactProvider>
-  </React.StrictMode>
+  <Web3ReactProvider getLibrary={getLibrary}>
+    <Router basename="/web-gallery">
+      <App />
+    </Router>
+  </Web3ReactProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
