@@ -1,6 +1,6 @@
 {
   "name": "web-gallery",
-  "homepage": "https://mehdibalouchi.github.io/web-gallery",
+  "homepage": "https://mehdibalouchi.github.io",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -28,7 +28,7 @@
   },
   "scripts": {
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build -o mehdi",
+    "deploy": "echo 'gallery.fx.land' > ./build/CNAME && gh-pages -d build -o mehdi",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
