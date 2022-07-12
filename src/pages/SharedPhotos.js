@@ -6,42 +6,41 @@ import { useRef } from "react";
 
 const SharedPhotos = ({ fulaClient, DID }) => {
   const [photos, setPhotos] = useState([]);
-  const allPhotos=useRef({});
+  const allPhotos = useRef({});
   const subscribeQuery = async () => {
-    const resultIterator = fulaClient.graphqlSubscribe(readQuery, {
+    const sharedPhotoRecords = await fulaClient.graphql(readQuery, {
       filter: {
         shareWithId: { eq: `${DID.authDID}` },
       },
     });
-    for await (const sharedPhotoRecords of resultIterator) {
-      if (sharedPhotoRecords.data && sharedPhotoRecords.data.read) {
-        const newPhotos = [];
-        for (const record of sharedPhotoRecords?.data?.read) {
-          if(allPhotos.current[record.id])
-            continue;
-          const encJWE = record.jwe;
-          const tagged = new TaggedEncryption(DID.did);
-          try {
-            const jwe = await tagged.decrypt(encJWE);
-            const photoFile = await fulaClient.receiveDecryptedFile(
-              jwe.CID,
-              Buffer.from(jwe.symetricKey.key, "base64"),
-              Buffer.from(jwe.symetricKey.iv, "base64")
-            );
-            if (photoFile){
-              newPhotos.push({
-                cid: jwe.CID,
-                photoFile,
-              });
-              allPhotos.current[record.id]=true
-            }
-          } catch (e) {
-            console.log(e);
-            continue;
+    console.log({sharedPhotoRecords})
+    if (sharedPhotoRecords.data && sharedPhotoRecords.data.read) {
+      const newPhotos = [];
+      for (const record of sharedPhotoRecords?.data?.read) {
+        if (allPhotos.current[record.id])
+          continue;
+        const encJWE = record.jwe;
+        const tagged = new TaggedEncryption(DID.did);
+        try {
+          const jwe = await tagged.decrypt(encJWE);
+          const photoFile = await fulaClient.receiveDecryptedFile(
+            jwe.CID,
+            Buffer.from(jwe.symetricKey.key, "base64"),
+            Buffer.from(jwe.symetricKey.iv, "base64")
+          );
+          if (photoFile) {
+            newPhotos.push({
+              cid: jwe.CID,
+              photoFile,
+            });
+            allPhotos.current[record.id] = true
           }
+        } catch (e) {
+          console.log(e);
+          continue;
         }
-        setPhotos(prev=>([...newPhotos,...prev]));
       }
+      setPhotos(prev => ([...newPhotos, ...prev]));
     }
   };
   useEffect(() => {
