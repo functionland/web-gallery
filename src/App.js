@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import { Route, BrowserRouter as Router, Routes, Link, NavLink } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, Link, NavLink, useLocation } from 'react-router-dom';
 import Boxes from './pages/Boxes';
 import Gallery from './pages/Gallery';
 import Identity from './pages/Identity';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Status } from '@functionland/fula';
 import SharedPhotos from './pages/SharedPhotos';
 
@@ -19,19 +19,36 @@ function App() {
 
   // DID
   const [DID, setDID] = useState(undefined)
-  
+
+  const location = useLocation()
+
+  const navLinks = [
+    {
+      to: '/',
+      caption: 'Gallery'
+    },
+    {
+      to: '/box',
+      caption: 'Connect to Box'
+    },
+    {
+      to: '/identity',
+      caption: 'Connect to Wallet'
+    },
+    {
+      to: '/shared',
+      caption: 'Shared'
+    }
+  ]
   return (
     <div className="app">
       <div className='app-container'>
         <div className='app-header'>
-          <NavLink to='/' className='link' style={hideIfActive}>Gallery</NavLink>
-          <NavLink to='/boxes' className='link' style={hideIfActive}>Connect to Box</NavLink>
-          <NavLink to='/identity' className='link' style={hideIfActive}>Connect to Wallet</NavLink>
-          <NavLink to='/shared' className='link' style={hideIfActive}>Shared</NavLink>
+          {navLinks.filter(link => link.to !== location.pathname).map(link => <NavLink to={link.to} className="link">{link.caption}</NavLink>)}
         </div>
         <Routes>
           <Route path="/" element={<Gallery fulaClient={fulaClient} DID={DID} />} />
-          <Route path="/boxes" element={
+          <Route path="/box" element={
             <Boxes fulaClient={fulaClient}
               setFulaClient={setFulaClient}
               connectionStatus={connectionStatus}
