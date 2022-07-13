@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Buffer } from "buffer";
 import Photo from "../components/Photo";
 import { useRef } from "react";
+import { Spinner } from "@chakra-ui/react";
 
 const SharedPhotos = ({ fulaClient, DID }) => {
   const [photos, setPhotos] = useState([]);
+  const [isDownloading, setIsDownloading] = useState(false)
   const allPhotos = useRef({});
   const subscribeQuery = async () => {
     const sharedPhotoRecords = await fulaClient.graphql(readQuery, {
@@ -16,6 +18,7 @@ const SharedPhotos = ({ fulaClient, DID }) => {
     console.log({sharedPhotoRecords})
     if (sharedPhotoRecords.data && sharedPhotoRecords.data.read) {
       const newPhotos = [];
+      setIsDownloading(true)
       for (const record of sharedPhotoRecords?.data?.read) {
         if (allPhotos.current[record.id])
           continue;
@@ -34,13 +37,14 @@ const SharedPhotos = ({ fulaClient, DID }) => {
               photoFile,
             });
             allPhotos.current[record.id] = true
+            setPhotos(prev => ([{cid: jwe.CID, photoFile}, ...prev]));
           }
         } catch (e) {
           console.log(e);
           continue;
         }
       }
-      setPhotos(prev => ([...newPhotos, ...prev]));
+      setIsDownloading(false)
     }
   };
   useEffect(() => {
@@ -57,13 +61,14 @@ const SharedPhotos = ({ fulaClient, DID }) => {
         {fulaClient === null ? <div>No Box Connected!</div> : null}
         {DID === undefined ? <div>No Wallet Connected!</div> : null}
       </div>
+      {isDownloading && <Spinner className="spinner" color="#149fff" />}
       {fulaClient !== null ? (
         <div>
           {photos.length > 0 &&
             photos.map((photo, index) => (
               <Photo key={`${photo?.cid}`} photo={photo.photoFile} />
             ))}
-          {photos.length === 0 && (
+          {photos.length === 0 && !isDownloading && (
             <div className="container">
               <h1>no photo</h1>
             </div>

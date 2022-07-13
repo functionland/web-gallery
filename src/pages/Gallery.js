@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Photo from "../components/Photo";
 import { TaggedEncryption } from "@functionland/fula-sec";
 import { Buffer } from "buffer";
+import { Spinner } from "@chakra-ui/react";
 
 const Gallery = ({ fulaClient, DID }) => {
   const [photos, setPhotos] = useState([]);
+  const [isDownloading, setIsDownloading] = useState(false)
 
   useEffect(() => {
     if (fulaClient && DID) {
@@ -16,6 +18,7 @@ const Gallery = ({ fulaClient, DID }) => {
         });
         if (allData && allData.data && allData.data.read) {
           setPhotos([]);
+          setIsDownloading(true)
           for (const { id, jwe, ownerId } of allData.data.read) {
             let file = null;
             console.log({ id, jwe, ownerId });
@@ -46,6 +49,7 @@ const Gallery = ({ fulaClient, DID }) => {
                 },
               ]);
           }
+          setIsDownloading(false)
         } else {
           setPhotos([]);
         }
@@ -83,6 +87,7 @@ const Gallery = ({ fulaClient, DID }) => {
         {fulaClient === null ? <div>No Box Connected!</div> : null}
         {DID === undefined ? <div>No Wallet Connected!</div> : null}
       </div>
+      {isDownloading && <Spinner className="spinner" color="#149fff" />}
       {fulaClient !== null ? (
         <div>
           {/* <Uploader onUpload={onUpload} /> */}
@@ -90,7 +95,7 @@ const Gallery = ({ fulaClient, DID }) => {
             photos.map((photo, index) => (
                 <Photo  key={photo.cid} photo={photo.file} />
             ))}
-          {photos.length === 0 && (
+          {photos.length === 0 && !isDownloading && (
             <div className="container">
               <h1>no photo</h1>
             </div>
